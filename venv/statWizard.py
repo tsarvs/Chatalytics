@@ -3,5 +3,4 @@ def calculate_timestamp_frequency_days(timestampDict):
         return
 
     for key in timestampDict:
-        #print(str(key) + "," + str(timestampDict[key]))
-        print(str(timestampDict[key]))
+        print(str(key) + "," + str(timestampDict[key]))

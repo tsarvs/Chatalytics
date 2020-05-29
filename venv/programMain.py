@@ -20,10 +20,11 @@ def main():
         dataWizard.parse_file(f)
 
         #calculations on said data structures
-        statWizard.calculate_timestamp_frequency_days(dataWizard.timestampDict)
+        print(dataWizard.messageDict.get(422))
     except FileNotFoundError:
         print(ERROR_MESSAGE_FILE_NOT_FOUND)
     finally:
         f.close()
+
 
 main()

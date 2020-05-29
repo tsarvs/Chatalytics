@@ -1,53 +1,64 @@
 import re
 
-timestampRegex = re.compile("^\[(\d){1,2}\/(\d){1,2}\/(\d){2,4}\,(.)*$")
-timestampDict = {}
+timestampRegex = re.compile("^\[(\d){1,2}\/(\d){1,2}\/(\d){2,4}\,(.)*$")#regex for checking if theres a timestamp at the beginning of a string
+messageDict = {}
 
 def parse_timestamp(line):
     data = line.split(" ")
 
     timestamp = []
 
-    if(timestampRegex.match(data[0])):
+    message_date = data[0][1:-1]
+    message_time = data[1] + ' ' + data[2].replace(']', ' ')
 
-        message_date = data[0][1:-1]
-        message_time = [data[1], data[2].replace(']', ' ')]
-
-        timestamp = [message_date, message_time]
-    else:
-        timestamp = ["Warning", "Not end of message"]
+    timestamp = [message_date, message_time]
 
     return timestamp
 
-#TODO: setup fxn
-def parse_author(line):
-    data = line.split(" ")
-
-#TOSO: setup fxn
+#TODO: setup message parsing
 def parse_message(line):
     data = line.split(" ")
 
-def add_timestamp_to_dict(timestamp):
-    if (timestamp[0] not in ('Warning', None)):
-        key = timestamp[0]
+    message = []
 
-        if timestamp[0] in timestampDict:
-            timestampDict[key] += 1
-        else:
-            timestampDict[key] = 1
+    author = data[3]
 
-def parse_line(line):
+    textMessage = ""
+
+    i = 4
+    while((':' not in author) and (i < len(data))):
+        concatString = " " + data[i]
+        author += concatString
+        i+=1
+
+    while(i < len(data)):
+        textMessage += data[i] + " "
+        i+=1
+
+    author = author.replace(':', '')
+    textMessage = textMessage[:-1]
+
+    message = [author, textMessage]
+
+    return message
+
+
+def parse_line(messageNumber, line):
     #split up line into data types
     timestamp = parse_timestamp(line)
 
+    textMessage = parse_message(line)
+
     #add to data structures
-    add_timestamp_to_dict(timestamp)
+    messageDict[messageNumber] = [timestamp, textMessage]
 
 def parse_file(file):
-    i = 1
+    i = 0
 
     for line in file:
         if (timestampRegex.match(line)):
-            parse_line(line)
+            print("Message:", i)
+            parse_line(i, line)
+            i += 1
         else:
-            i = i
+            messageDict.get(i-1)[1][1] += line
