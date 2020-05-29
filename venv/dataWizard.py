@@ -70,7 +70,7 @@ def parse_file(file):
 
     for line in file:
         if (timestampRegex.match(line)):
-            print("Message:", i)
+            #print("Message:", i)
             parse_line(i, line)
             i += 1
         else:

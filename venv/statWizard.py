@@ -1,3 +1,5 @@
+import re
+
 def calculate_messages_per_author(messageDict):
     authorDict = {}
 
@@ -20,7 +22,52 @@ def calculate_messages_per_day(messageDict):
             dailyFreqDict[msg_date] = 1
 
     for x in dailyFreqDict:
-        print(x)
+        print(x, dailyFreqDict[x])
 
-    for x in dailyFreqDict:
-        print(dailyFreqDict[x])
+def calculate_messages_per_time(messageDict):
+    timeFreqDict = {}
+
+    for key, ((msg_date, msg_time), (msg_author, msg_text)) in messageDict.items():
+        timestamp_split = msg_time.split(" ")
+
+        time = timestamp_split[0].split(":")
+
+        #by changing the time key, you can change how things are grouped in the dictionary
+
+        #group by hour
+        #time_key = time[0] + timestamp_split[1]
+
+        #group by minute
+        time_key = time[0] + ':' + time[1] + ' ' + timestamp_split[1]
+
+        #group by second
+        #time_key = time[0] + ':' + time[1] + ':' + time[2] + ' ' + timestamp_split[1]
+
+        if time_key in timeFreqDict:
+            timeFreqDict[time_key] += 1
+        else:
+            timeFreqDict[time_key] = 1
+
+    for x in timeFreqDict:
+        print(x, timeFreqDict[x])
+
+def calculate_word_frequencies(messageDict):
+    wordDict = {}
+
+    numberRegex = re.compile("^\d+$")
+
+    for key, ((msg_date, msg_time), (msg_author, msg_text)) in messageDict.items():
+        message_split = msg_text.split(" ")
+
+        for word in message_split:
+            if ('.jpg' not in word) and ('.mp4' not in word) and ("http:" not in word) and ("http:" not in word):
+                cleaned_word = re.sub('[^A-Za-z0-9]+', '', word).lower()
+
+                if (numberRegex.match(cleaned_word) == None):
+                    if cleaned_word in wordDict:
+                        wordDict[cleaned_word] += 1
+                    else:
+                        wordDict[cleaned_word] = 1
+
+    for x in wordDict:
+        print(x, wordDict[x])
