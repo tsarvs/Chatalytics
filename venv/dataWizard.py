@@ -1,6 +1,6 @@
 import re
 
-timestampRegex = re.compile("^\[(\d){1,2}\/(\d){1,2}\/(\d){2,4}\,(.)*$")#regex for checking if theres a timestamp at the beginning of a string
+timestampRegex = re.compile("^\[(\d){1,2}\/(\d){1,2}\/(\d){2,4}\,\s(\d){1,2}\:(\d){2}\:(\d){2}\s(P|A)M\](.)*$")#regex for checking if theres a timestamp at the beginning of a string
 messageDict = {}
 
 def parse_timestamp(line):
@@ -15,7 +15,6 @@ def parse_timestamp(line):
 
     return timestamp
 
-#TODO: setup message parsing
 def parse_message(line):
     data = line.split(" ")
 
@@ -31,12 +30,26 @@ def parse_message(line):
         author += concatString
         i+=1
 
-    while(i < len(data)):
-        textMessage += data[i] + " "
-        i+=1
-
     author = author.replace(':', '')
-    textMessage = textMessage[:-1]
+
+    #if true then the message parse is a line where someone changed the header
+    if ("changed the subject to " in author)\
+            or ("changed this group's icon" in author)\
+            or (" left" in author)\
+            or (" was added" in author)\
+            or (" removed" in author)\
+            or (" added " in author)\
+            or (" changed the group description" in author)\
+            or (" deleted " in author)\
+            or ("Beefachunga!" in author):
+        textMessage = author
+        author = 'System Notification'
+    else:
+        while(i < len(data)):
+            textMessage += data[i] + " "
+            i+=1
+
+        textMessage = textMessage[:-1]
 
     message = [author, textMessage]
 

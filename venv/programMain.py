@@ -19,8 +19,12 @@ def main():
         #read through every line, creating data structures
         dataWizard.parse_file(f)
 
+        messageDict = dataWizard.messageDict
+
         #calculations on said data structures
-        print(dataWizard.messageDict.get(422))
+        statWizard.calculate_messages_per_author(messageDict)
+
+        statWizard.calculate_messages_per_day(messageDict)
     except FileNotFoundError:
         print(ERROR_MESSAGE_FILE_NOT_FOUND)
     finally:
