@@ -28,7 +28,7 @@ def main():
         #statWizard.calculate_word_frequencies(messageDict)
         #statWizard.calculate_char_frequencies(messageDict)
 
-        #user = 'Nic Holt'
+        #user = ''
         #statWizard.calculate_user_daily_frequencies(user, messageDict)
         #statWizard.calculate_user_time_frequencies(user, messageDict)
         #statWizard.calculate_user_word_frequencies(user,messageDict)
