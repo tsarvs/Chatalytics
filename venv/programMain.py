@@ -26,7 +26,12 @@ def main():
         #statWizard.calculate_messages_per_day(messageDict)
         #statWizard.calculate_messages_per_time(messageDict)
         #statWizard.calculate_word_frequencies(messageDict)
+        #statWizard.calculate_char_frequencies(messageDict)
 
+        #user = 'Nic Holt'
+        #statWizard.calculate_user_daily_frequencies(user, messageDict)
+        #statWizard.calculate_user_time_frequencies(user, messageDict)
+        #statWizard.calculate_user_word_frequencies(user,messageDict)
     except FileNotFoundError:
         print(ERROR_MESSAGE_FILE_NOT_FOUND)
     finally:
