@@ -1,6 +1,14 @@
 import re
 
-timestampRegex = re.compile("^\[(\d){1,2}\/(\d){1,2}\/(\d){2,4}\,\s(\d){1,2}\:(\d){2}\:(\d){2}\s(P|A)M\](.)*$")#regex for checking if theres a timestamp at the beginning of a string
+#regex for checking if theres a timestamp at the beginning of a string
+regexString_Timestamp = "^\[(\d){1,2}\/(\d){1,2}\/(\d){2,4}\,\s(\d){1,2}\:(\d){2}\:(\d){2}\]"
+timestampRegex = re.compile(regexString_Timestamp)
+
+regexString_CreatedGroup = "^(.)*created(\s)this(\s)group"
+createdGroupRegex = re.compile(regexString_CreatedGroup)
+
+messageAboutEncyption = "Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them."
+
 messageDict = {}
 
 def parse_timestamp(line):
@@ -9,22 +17,26 @@ def parse_timestamp(line):
     timestamp = []
 
     message_date = data[0][1:-1]
-    message_time = data[1] + ' ' + data[2].replace(']', ' ')
+    message_time = data[1][0:-1]
 
     timestamp = [message_date, message_time]
 
     return timestamp
 
+def parse_createdGroupMessage():
+    #TODO: split messages up by message type
+    print()
+
+
 def parse_message(line):
+    #initialize local data
+    author = ""
+    textMessage = ""
+    message = [author, textMessage]
+
     data = line.split(" ")
 
-    message = []
-
-    author = data[3]
-
-    textMessage = ""
-
-    i = 4
+    i = 2
     while((':' not in author) and (i < len(data))):
         concatString = " " + data[i]
         author += concatString
@@ -33,17 +45,33 @@ def parse_message(line):
     author = author.replace(':', '')
 
     #if true then the message parse is a line where someone changed the header
-    if ("changed the subject to " in author)\
-            or ("changed this group's icon" in author)\
-            or (" left" in author)\
-            or (" was added" in author)\
-            or (" removed" in author)\
-            or (" added " in author)\
-            or (" changed the group description" in author)\
-            or (" deleted " in author)\
-            or ("Beefachunga!" in author):
+    if (" changed the subject to " in author):
         textMessage = author
-        author = 'System Notification'
+        author = 'System Notification - Changed Subject'
+    elif ("changed this group's icon" in author):
+        textMessage = author
+        author = 'System Notification - Changed Icon'
+    elif (" changed the group description" in author):
+        textMessage = author
+        author = 'System Notification - Changed Description'
+    elif (" left" in author):
+        textMessage = author
+        author = 'System Notification - User Left'
+    elif (" added" in author):
+        textMessage = author
+        author = 'System Notification - User Added'
+    elif (" removed" in author):
+        textMessage = author
+        author = 'System Notification - User Removed'
+    elif (" deleted" in author):
+        textMessage = author
+        author = 'System Notification - Message Deleted'
+    elif (" created this group" in author):
+        textMessage = author
+        author = 'System Notification - Created Group'
+    elif (messageAboutEncyption in line):
+        textMessage = messageAboutEncyption
+        author = 'System Notification - Encyption Message'
     else:
         while(i < len(data)):
             textMessage += data[i] + " "
@@ -69,9 +97,12 @@ def parse_file(file):
     i = 0
 
     for line in file:
-        if (timestampRegex.match(line)):
+        #clean line of bad characters before evaluating the regex
+        cleaned_line = str(line.encode('ascii', 'ignore'))[2:-3]
+
+        if (timestampRegex.match(cleaned_line)):
             #print("Message:", i)
-            parse_line(i, line)
+            parse_line(i, cleaned_line)
             i += 1
         else:
             messageDict.get(i-1)[1][1] += line
