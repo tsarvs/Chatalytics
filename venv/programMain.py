@@ -44,9 +44,9 @@ def main():
         #print("\nCharacter Frequencies:\n")
         #statWizard.calculate_char_frequencies(messageDict)
 
-        #user = 'Xavier'
+        user = 'Xavier'
         #statWizard.calculate_user_daily_frequencies(user, messageDict)
-        #statWizard.calculate_user_time_frequencies(user, messageDict)
+        statWizard.calculate_user_time_frequencies(user, messageDict)
         #statWizard.calculate_user_word_frequencies(user,messageDict)
 
         #statWizard.calculate_messages_per_author_per_day(messageDict)

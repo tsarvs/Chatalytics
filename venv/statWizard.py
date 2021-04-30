@@ -155,20 +155,18 @@ def calculate_user_time_frequencies(userName, messageDict):
 
     for key, ((msg_date, msg_time), (msg_author, msg_text)) in messageDict.items():
         if(userName == msg_author):
-            timestamp_split = msg_time.split(" ")
-
-            time = timestamp_split[0].split(":")
+            timestamp_split = msg_time.split(":")
 
             #by changing the time key, you can change how things are grouped in the dictionary
 
             #group by hour
-            time_key = time[0] + timestamp_split[1]
+            time_key = timestamp_split[0]
 
             #group by minute
-            #ime_key = time[0] + ':' + time[1] + ' ' + timestamp_split[1]
+            #ime_key = timestamp_split[0] + ':' + timestamp_split[1]
 
             #group by second
-            #time_key = time[0] + ':' + time[1] + ':' + time[2] + ' ' + timestamp_split[1]
+            #time_key = timestamp_split[0] + ':' + timestamp_split[1] + ':' + timestamp_split[2]
 
             if time_key in timeFreqDict:
                 timeFreqDict[time_key] += 1
