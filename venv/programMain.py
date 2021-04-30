@@ -26,7 +26,7 @@ def main():
         #step 3: calculations on said data structures
 
         #print("Messages Per Author:\n")
-        statWizard.calculate_messages_per_author(messageDict)
+        #statWizard.calculate_messages_per_author(messageDict)
 
         #print("\nMessages Per Day:\n")
         #statWizard.calculate_messages_per_day(messageDict)
@@ -44,7 +44,7 @@ def main():
         #print("\nCharacter Frequencies:\n")
         #statWizard.calculate_char_frequencies(messageDict)
 
-        #user = 'Dragon'
+        #user = 'Xavier'
         #statWizard.calculate_user_daily_frequencies(user, messageDict)
         #statWizard.calculate_user_time_frequencies(user, messageDict)
         #statWizard.calculate_user_word_frequencies(user,messageDict)

@@ -36,13 +36,14 @@ def parse_message(line):
 
     data = line.split(" ")
 
+    #go through the split data and get the authors name
     i = 2
     while((':' not in author) and (i < len(data))):
         concatString = " " + data[i]
         author += concatString
         i+=1
 
-    author = author.replace(':', '')
+    author = author[1:].replace(':', '')
 
     #if true then the message parse is a line where someone changed the header
     if (" changed the subject to " in author):
